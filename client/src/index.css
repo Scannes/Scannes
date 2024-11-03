@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply font-inter;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold text-black/80;
+}
+label,
+input,
+a,
+li,
+p {
+  @apply text-black/80;
+}
+html:has(.gradient) {
+  overflow-x: hidden;
+}
+body {
+  overflow-x: hidden;
+}
+.custom-container {
+  @apply max-w-screen-xl block mx-auto;
+}
+.gradient {
+  background-image: linear-gradient(to left, #ced5f3 50%, #2f4fcd00);
+  opacity: 60%;
+}
+
+.cropper-container img {
+  min-width: 100%;
+}
+.cropper-modal {
+  opacity: 1 !important;
+  @apply bg-black/20 rounded-md grayscale-0;
+}
+body:has(.yk) .rk {
+  display: none;
+}
+.body:has(.yk) {
+  overflow: hidden;
+}
+.overflow-x-auto::-webkit-scrollbar {
+  height: 15px;
+
+  @apply bg-white;
+}
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  height: 15px;
+
+  @apply bg-blue cursor-pointer;
+}
