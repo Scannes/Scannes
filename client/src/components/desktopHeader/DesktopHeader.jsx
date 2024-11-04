@@ -42,7 +42,7 @@ function DesktopLinks() {
           width={15}
           height={15}
         />
-        Scan
+        Scannen
       </label>
       <Link
         to="/recent"
@@ -55,7 +55,7 @@ function DesktopLinks() {
           width={15}
           height={15}
         />
-        Recent
+        Zuletzt
       </Link>
       {/* <ScanComponent /> */}
       <Link
@@ -69,7 +69,7 @@ function DesktopLinks() {
           height={20}
           color={location === "/settings" ? "white" : "black"}
         />
-        Settings
+        Einstellungen
       </Link>
     </nav>
   );

@@ -29,14 +29,24 @@ export async function login(email, password) {
     );
   }
 }
-export async function signup(email, password, name) {
+export async function signup(email, password, name, role) {
   try {
-    const res = await axios.post(`${API_URL}/users/signup`, {
-      email,
-      password,
-      confirmPassword: password,
-      name,
-    });
+    const jwt = Cookies.get("jwt");
+    const res = await axios.post(
+      `${API_URL}/users/signup`,
+      {
+        email,
+        password,
+        confirmPassword: password,
+        name,
+        role,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
     window.location.reload();
   } catch (err) {
     dispatch(
@@ -172,7 +182,6 @@ export async function getFilesByMonthAndCategory(
     setSearch("");
   }
 }
-``;
 export async function uploadPdfToServer(
   pdf,
   documentName,

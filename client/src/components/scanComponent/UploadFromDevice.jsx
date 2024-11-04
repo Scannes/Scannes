@@ -1,8 +1,13 @@
 import { useDispatch } from "react-redux";
 import GallerySvg from "../svgs/GallerySvg";
 import { setCropped, setImage } from "../../slices/userSlice";
+import CameraSvg from "../svgs/CameraSvg";
 
-export default function UploadFromDevice({ setDocumentName, closeModal }) {
+export default function UploadFromDevice({
+  setDocumentName,
+  closeModal,
+  IOS = false,
+}) {
   const dispatch = useDispatch();
   function handleImageUpload(e) {
     e.preventDefault();
@@ -35,8 +40,14 @@ export default function UploadFromDevice({ setDocumentName, closeModal }) {
         onChange={handleImageUpload}
         multiple={true}
       />
-      <GallerySvg height={28} width={28} />
-      <h3 className="text-blue text-base font-normal mt-1">Gallery</h3>
+      {!IOS ? (
+        <GallerySvg height={28} width={28} />
+      ) : (
+        <CameraSvg height={28} width={28} />
+      )}
+      <h3 className="text-blue text-base font-normal mt-1">
+        {!IOS ? "Gallery" : "Scan"}
+      </h3>
     </div>
   );
 }

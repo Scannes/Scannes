@@ -64,15 +64,15 @@ export default function Document({
           onClick={toggleDelete}
           className="fixed top-0 left-0 h-full w-full bg-black/50 z-[10000]"
         ></div>
-        <div className="bg-blue fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000001] w-[300px] p-3 rounded-md">
+        <div className="bg-blue fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000001] w-full max-w-[350px] p-3 rounded-md">
           <h2 className="text-white text-center">
-            Are you sure you want to delete {file}?
+            Sind Sie sicher, dass Sie {file} löschen möchten?
           </h2>
           <button
             onClick={deleteIt}
             className="w-full outline-none border-none px-3 py-2 rounded-md bg-white mt-2"
           >
-            Delete it
+            Löschen
           </button>
         </div>
       </>
@@ -91,11 +91,11 @@ export default function Document({
           <input
             type="text"
             className="w-full outline-none border-none px-3 py-2 rounded-md"
-            placeholder="New file name.."
+            placeholder="Neuer Dateiname.."
             id="name"
           />
           <button className="w-full outline-none border-none px-3 py-2 rounded-md bg-white mt-2">
-            Change Name
+            Namen ändern
           </button>
         </form>
       </>
@@ -110,9 +110,9 @@ export default function Document({
       >
         <div className=" grid grid-cols-4 gap-5 px-3 items-center">
           <p className="text-center text-[14px] font-bold">Name</p>
-          <p className="text-center text-[14px] font-bold">Date</p>
-          <p className="text-center text-[14px] font-bold">Category</p>
-          <p className="text-center text-[14px] font-bold">Company</p>
+          <p className="text-center text-[14px] font-bold">Datum</p>
+          <p className="text-center text-[14px] font-bold">Kategorie</p>
+          <p className="text-center text-[14px] font-bold">Unternehmen</p>
         </div>
 
         <div
@@ -123,12 +123,12 @@ export default function Document({
             },${role?.toLowerCase() === "admin" ? "80px" : "100px"})`,
           }}
         >
-          <p className="text-center text-[14px] font-bold">Preview</p>
-          <p className="text-center text-[14px] font-bold">Upload</p>
-          <p className="text-center text-[14px] font-bold">Download</p>
-          <p className="text-center text-[14px] font-bold">Rename</p>
+          <p className="text-center text-[12px] font-bold">Vorschau</p>
+          <p className="text-center text-[12px] font-bold">Hochladen</p>
+          <p className="text-center text-[12px] font-bold">Herunterladen</p>
+          <p className="text-center text-[12px] font-bold">Umbenennen</p>
           {role?.toLowerCase() === "admin" && (
-            <p className="text-center text-[14px] font-bold">Delete</p>
+            <p className="text-center text-[12px] font-bold">Löschen</p>
           )}
         </div>
       </div>
@@ -167,14 +167,14 @@ export default function Document({
           className="bg-[#ECECEC] h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
         >
           <EyeSvg width={26} />
-          Preview
+          Vorschau
         </Link>
         <button
           onClick={upload}
           className="bg-[#ECECEC] h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
         >
           <UploadSvg width={18} />
-          Upload
+          Hochladen
         </button>
         <a
           href={`${BACKEND_URL}/file/download/${file}`}
@@ -182,14 +182,14 @@ export default function Document({
           className="bg-[#ECECEC] h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
         >
           <DownloadSvg width={18} />
-          Download
+          Herunterladen
         </a>
         <button
           onClick={toggleIsRenameActive}
           className="bg-[#D7D7D7] h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
         >
           <RenameSvg width={24} />
-          Rename
+          Umbenennen
         </button>
         {role?.toLowerCase() === "admin" && (
           <button
@@ -197,7 +197,7 @@ export default function Document({
             className="bg-[#FFA5A5] h-full w-full aspect-square rounded-lg text-black text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
           >
             <DeleteSvg width={24} />
-            Delete
+            Löschen
           </button>
         )}
       </div>

@@ -57,7 +57,7 @@ export default function SolidScanHeader({
         </div>
         <div className="px-3">
           <h4 className="font-medium text-lg text-center text-blue pt-3 border-t border-black/40 border-dotted">
-            Select the image you want to crop
+            Wählen Sie das Bild aus, das Sie zuschneiden möchten.
           </h4>
           <div className="grid grid-cols-3 gap-3 pb-5">
             {images.map((img, i) => (

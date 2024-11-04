@@ -12,7 +12,7 @@ export default function Scan() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
 
-  if (role === "admin" && user) navigate("/admin");
+  if ((role === "admin" || role === "staff") && user) navigate("/admin");
   if (!user) navigate("/login");
   return (
     <div className="pb-[150px]">

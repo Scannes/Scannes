@@ -19,10 +19,10 @@ export default function Documents() {
 
       <div className="max-w-[300px]">
         <h2 className="text-lg text-center text-[#9A9A9A]">
-          You {"don't"} have any documents
+          Sie haben keine Dokumente.
         </h2>
         <p className="text-[15px] text-center text-[#9A9A9A]">
-          Sync docs accross smartphones, tablets, and computers
+          Dokumente auf Smartphones, Tablets und Computern synchronisieren.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function Documents() {
           onChange={handleImageUpload}
           multiple={true}
         />
-        <PlusSvg height={15} width={15} color="#2F4FCD" /> Upload Here
+        <PlusSvg height={15} width={15} color="#2F4FCD" /> Hier hochladen
       </label>
     </div>
   );

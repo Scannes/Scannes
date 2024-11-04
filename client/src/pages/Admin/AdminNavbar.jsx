@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { logout, signup } from "../../utils/userApi";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function AdminNavbar() {
+  const userRole = useSelector((state) => state.user?.user?.role);
   const [isActive, setIsActive] = useState(false);
+  const [role, setRole] = useState("user");
+
   const navigate = useNavigate();
 
   function handleSubmit(e) {
@@ -16,7 +20,7 @@ export default function AdminNavbar() {
     const name = target.name.value;
     const email = target.email.value;
     const password = target.password.value;
-    signup(email, password, name);
+    signup(email, password, name, role);
     setIsActive(false);
   }
 
@@ -32,31 +36,37 @@ export default function AdminNavbar() {
         ></div>
         <form
           onSubmit={handleSubmit}
-          className="w-[330px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000000001] p-3 rounded-md bg-blue flex flex-col gap-2"
+          className="w-full max-w-[370px] h-fit fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000000001] p-3 rounded-md bg-blue flex flex-col gap-2"
         >
           <input
             required={true}
             type="text"
             id="name"
-            placeholder="Enter Client Name"
+            placeholder={`Geben Sie den Namen des ${
+              role.toLowerCase() === "user" ? "Kunden" : "Mitarbeiters"
+            } ein`}
             className="outline-none border-none p-3 rounded-md"
           />
           <input
             required={true}
             type="email"
             id="email"
-            placeholder="Enter Client Email"
+            placeholder={`Geben Sie die E-Mail-Adresse des ${
+              role.toLowerCase() === "user" ? "Kunden" : "Mitarbeiters"
+            } ein`}
             className="outline-none border-none p-3 rounded-md"
           />
           <input
             required={true}
             type="text"
             id="password"
-            placeholder="Enter Client Password"
+            placeholder={`Geben Sie das Passwort des ${
+              role.toLowerCase() === "user" ? "Kunden" : "Mitarbeiters"
+            } ein`}
             className="outline-none border-none p-3 rounded-md"
             minLength={7}
           />
-          <button className="bg-white/90 p-3 rounded-md">Create</button>
+          <button className="bg-white/90 p-3 rounded-md">Erstellen</button>
         </form>
       </>
     );
@@ -66,24 +76,40 @@ export default function AdminNavbar() {
         <Link to="/admin">
           <img src="/Logo.png" alt="Logo" className="max-w-[140px]" />
         </Link>
-        <div className="flex gap-3 flex-wrap md:flex-nowrap">
-          <button
-            onClick={() => setIsActive(!isActive)}
-            className="text-white bg-blue w-full min-w-[180px] rounded-md py-1 px-3 hover:opacity-80"
-          >
-            Add Client
-          </button>
+        <div className="flex gap-3 flex-wrap flex-end justify-end md:w-[80%] ">
+          {userRole === "admin" && (
+            <>
+              <button
+                onClick={() => {
+                  setIsActive(!isActive);
+                  setRole("staff");
+                }}
+                className="text-white bg-blue w-full md:max-w-[220px] rounded-md py-1 px-3 hover:opacity-80"
+              >
+                Mitarbeiter hinzufügen
+              </button>
+              <button
+                onClick={() => {
+                  setIsActive(!isActive);
+                  setRole("user");
+                }}
+                className="text-white bg-blue w-full md:max-w-[180px] rounded-md py-1 px-3 hover:opacity-80"
+              >
+                Kunde hinzufügen
+              </button>
+            </>
+          )}
           <button
             onClick={authenticate}
-            className="text-white bg-blue w-full min-w-[180px] rounded-md py-1 px-3 hover:opacity-80"
+            className="text-white bg-blue w-full md:max-w-[180px] rounded-md py-1 px-3 hover:opacity-80"
           >
-            Authenticate
+            Authentifizieren
           </button>
           <button
             onClick={() => logout()}
-            className="text-white bg-blue w-full min-w-[100px] rounded-md py-1 px-3 hover:opacity-80"
+            className="text-white bg-blue w-full md:max-w-[100px] rounded-md py-1 px-3 hover:opacity-80"
           >
-            Logout
+            Abmelden
           </button>
         </div>
       </div>

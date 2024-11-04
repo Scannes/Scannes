@@ -9,18 +9,16 @@ export default function OnBoard() {
   // Slide content
   const slides = [
     {
-      heading: "Scan Everywhere",
-      content: "Scan documents everywhere anytime from your pocket.",
+      heading: "Dokumente scannen/hochladen",
+      content: "Scanne deine Dokumente oder wähle sie aus deiner Galerie aus.",
     },
     {
-      heading: "Select Categories",
-      content:
-        "Organize and categorize your documents with ease. By just selecting a category",
+      heading: "Kategorie auswählen",
+      content: "Wähle die passende Kategorie aus.",
     },
     {
-      heading: "Share Instantly",
-      content:
-        "Quickly share documents with colleagues and friends by just sending it.",
+      heading: "Dokumente senden",
+      content: "Ganz einfach per Knopfdruck die ausgewählten Dokumente senden.",
     },
   ];
 

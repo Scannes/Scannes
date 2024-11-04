@@ -4,36 +4,39 @@ import { deleteUser, getAllUsers } from "../../utils/userApi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export default function Companies() {
+  const role = useSelector((state) => state.user?.user?.role);
   const companies = useSelector((state) => state.user.users);
   useEffect(() => {
     getAllUsers();
   }, []);
   if (companies.length === 0)
-    return <h3 className="font-semibold mb-2 text-lg">No Companies yet</h3>;
+    return (
+      <h3 className="font-semibold mb-2 text-lg">Noch keine Unternehmen</h3>
+    );
   return (
     <div className="mt-5">
-      <h3 className="font-semibold mb-2 text-lg">Companies List</h3>
+      <h3 className="font-semibold mb-2 text-lg">Unternehmensliste</h3>
 
       <div className="bg-white border border-[#ddd] rounded-md overflow-hidden">
         <div className="flex items-center justify-between px-8 py-3 gap-4">
           <p>Name</p>
-          <p>Delete</p>
+          {role === "admin" && <p>Löschen</p>}
         </div>
         {companies.map((company) => (
-          <Company name={company} key={company} />
+          <Company role={role} name={company} key={company} />
         ))}
       </div>
     </div>
   );
 }
 
-function Company({ name }) {
+function Company({ name, role }) {
   const [deleteActive, setDeleteActive] = useState(false);
 
   function toggleDelete() {
     setDeleteActive(!deleteActive);
   }
-  if (deleteActive)
+  if (deleteActive && role === "admin")
     return (
       <>
         <div
@@ -42,13 +45,13 @@ function Company({ name }) {
         ></div>
         <div className="bg-blue fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000001] w-[300px] p-3 rounded-md">
           <h2 className="text-white text-center">
-            Are you sure you want to delete {name}?
+            Sind Sie sicher, dass Sie {name} löschen möchten?
           </h2>
           <button
             onClick={() => deleteUser(name)}
             className="w-full outline-none border-none px-3 py-2 rounded-md bg-white mt-2"
           >
-            Delete it
+            Löschen
           </button>
         </div>
       </>
@@ -59,16 +62,18 @@ function Company({ name }) {
       className="flex items-center justify-between px-8 py-3 gap-4 border-t border-[#ddd]"
     >
       <p>{name}</p>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleDelete();
-        }}
-        className="mr-2"
-      >
-        <DeleteCompanySvg width={16} />
-      </button>
+      {role === "admin" && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            toggleDelete();
+          }}
+          className="mr-2"
+        >
+          <DeleteCompanySvg width={16} />
+        </button>
+      )}
     </Link>
   );
 }

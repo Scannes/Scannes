@@ -23,7 +23,7 @@ export default function Crop() {
   const cropperRef = React.useRef(null);
   const role = useSelector((state) => state.user?.user?.role);
 
-  if (role === "admin" && user) navigate("/admin");
+  if ((role === "admin" || role === "staff") && user) navigate("/admin");
 
   if (!user) navigate("/login");
   const handleCrop = () => {
@@ -78,7 +78,7 @@ export default function Crop() {
             className="mx-auto block mt-3 bg-blue text-white px-10 py-2 rounded-lg"
             onClick={handleCrop}
           >
-            Crop Image
+            Bild zuschneiden
           </button>
         </div>
       )}

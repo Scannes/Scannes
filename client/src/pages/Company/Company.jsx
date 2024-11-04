@@ -18,7 +18,7 @@ export default function Company() {
   const navigate = useNavigate();
   const { company } = useParams();
 
-  if (role !== "admin" && user) navigate("/");
+  if (role !== "admin" && role !== "staff" && user) navigate("/");
   if (!user) navigate("/login");
 
   const [current, setCurrent] = useState(1);
@@ -45,7 +45,7 @@ export default function Company() {
     <div>
       <div className="max-w-[1500px] block mx-auto p-4 rounded-lg mt-4 bg-[#f4f4f4]">
         <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-2 md:gap-5 mb-5">
-          <h3 className="font-semibold mb-2 text-lg">All Documents</h3>
+          <h3 className="font-semibold mb-2 text-lg">Alle Dokumente</h3>
           <CompanySearch setSearch={setSearch} search={search} />
         </div>
         <div className="bg-white rounded-md py-3 px-5 border border-[#ddd] overflow-scroll lg:overflow-hidden ">

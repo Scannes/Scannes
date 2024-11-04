@@ -33,7 +33,7 @@ export default function RecentDocument({
             <div className="flex items-center justify-between">
               <p className="text-[#9A9A9A] capitalize">{uploadDate} </p>
               <p>
-                {pages} {pages > 1 ? "Pages" : "Page"}
+                {pages} {pages > 1 ? "Seiten" : "Seite"}
               </p>
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function RecentDocument({
         <div className="flex items-center justify-between">
           <p className="text-[#9A9A9A] capitalize">{uploadDate} </p>
           <p>
-            {pages} {pages > 1 ? "Pages" : "Page"}
+            {pages} {pages > 1 ? "Seiten" : "Seite"}
           </p>
         </div>
       </div>

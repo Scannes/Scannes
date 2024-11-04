@@ -3,7 +3,7 @@ const File = require("../models/fileModel");
 const catchAsync = require("../utils/catchAsync");
 
 exports.getAllFiles = catchAsync(async function (req, res, next) {
-  if (req.user.role === "admin") {
+  if (req.user.role === "admin" || req.user.role === "staff") {
     const files = await File.find().sort({ date: -1 });
 
     res.status(200).json({

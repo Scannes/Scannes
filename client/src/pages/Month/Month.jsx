@@ -106,7 +106,7 @@ export default function Month() {
               key={cat}
             >
               {fetching && cat.toLowerCase() === category.toLowerCase()
-                ? "Loading..."
+                ? "Laden.."
                 : cat}
             </button>
           ))}
@@ -123,7 +123,7 @@ export default function Month() {
             <input
               type="text"
               className="block ml-auto p-3 px-5 bg-[#f4f4f4] text-[#222] outline-none rounded-full w-full max-w-[400px] text-[17px] mt-7 mb-3"
-              placeholder="Search"
+              placeholder="Suche"
               onChange={(e) => setSearch(e.target.value.trim())}
             />
             <Documents filteredFiles={currentFiles} />
@@ -138,7 +138,7 @@ export default function Month() {
 
             {fetched && filteredFiles.length === 0 && (
               <h3 className=" mt-4 text-center font-semibold mb-4 text-xl bg-[#f4f4f4] px-3 py-3 rounded-md shadow-md">
-                No Files Found
+                Keine Dateien gefunden
               </h3>
             )}
           </>

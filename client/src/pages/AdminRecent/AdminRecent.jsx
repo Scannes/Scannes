@@ -17,7 +17,8 @@ export default function AdminRecent() {
 
   const navigate = useNavigate();
 
-  if (role !== "admin" && user) navigate("/");
+  if (role !== "admin" && role !== "staff" && user) navigate("/");
+
   if (!user) navigate("/login");
 
   const [current, setCurrent] = useState(1);
@@ -41,13 +42,15 @@ export default function AdminRecent() {
   if (files?.length === 0)
     return (
       <h3 className="font-semibold mb-2 text-lg text-center h-[80vh] flex items-center justify-center">
-        No Documents Yet
+        Noch keine Dokumente
       </h3>
     );
 
   return (
     <div className="max-w-[1500px] block mx-auto p-4 rounded-lg mt-4 bg-[#f4f4f4]">
-      <h3 className="font-semibold mb-2 text-lg">Recent Documents</h3>
+      <h3 className="font-semibold mb-2 text-lg">
+        Zuletzt verwendete Dokumente
+      </h3>
       <div className="flex md:flex-row flex-col gap-4 md:gap-2 items-end justify-between mb-5">
         <RecentDocuments />
         <div className="md:hidden relative min-w-[270px] max-w-[400px] w-[40%]">

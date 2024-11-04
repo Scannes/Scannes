@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddSvg from "../svgs/AddSvg";
 import DeleteSvg from "../svgs/DeleteSvg";
 import PencilSvg from "../svgs/PencilSvg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   deleteImages,
   setCropped,
@@ -21,6 +21,8 @@ export default function AddEditDeleteBtns() {
   const [isDeleteActive, setIsDeleteActive] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
   function handleNameChange() {
     if (name.trim() !== "") {
       dispatch(setImageName(name));
@@ -52,6 +54,12 @@ export default function AddEditDeleteBtns() {
     dispatch(setImage(urls));
     dispatch(setCropped(urls));
   }
+
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent;
+    const iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+    setIsIOS(iOS);
+  }, []);
 
   if (isNameChangeActive)
     return (
@@ -90,11 +98,31 @@ export default function AddEditDeleteBtns() {
   return (
     <div className="flex items-center justify-center gap-3 mb-3">
       <div>
-        <Button handler={() => setIsOpen(true)}>
-          <AddSvg height={25} />
-        </Button>
-        {isOpen && (
-          <ScanType desktop={true} setIsOpen={setIsOpen} isOpen={isOpen} />
+        {!isIOS ? (
+          <>
+            <Button handler={() => setIsOpen(true)}>
+              <AddSvg height={25} />
+            </Button>
+            {isOpen && (
+              <ScanType desktop={true} setIsOpen={setIsOpen} isOpen={isOpen} />
+            )}
+          </>
+        ) : (
+          <Button handler={() => setIsOpen(true)}>
+            <AddSvg height={25} />
+            <label
+              htmlFor="file-uploads-yk"
+              className="cursor-pointer absolute top-0 left-0 w-full h-full"
+            ></label>
+            <input
+              type="file"
+              accept="image/*"
+              className="opacity-0 hidden"
+              id="file-uploads-yk"
+              onChange={handleImageUpload}
+              multiple={true}
+            />
+          </Button>
         )}
       </div>
       <div className="flex items-center gap-3 rk">

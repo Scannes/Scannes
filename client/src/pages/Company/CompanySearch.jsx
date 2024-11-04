@@ -13,7 +13,7 @@ export default function CompanySearch({ search, setSearch }) {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search"
+        placeholder="Suche"
         className="text-[14px] py-2 px-4 pr-[35px] w-full rounded-full border border-[#ccc] bg-[#E5E5E5] outline-none"
       />
 

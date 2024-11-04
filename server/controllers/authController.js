@@ -24,13 +24,16 @@ function getIDFromToken(token) {
 ////////////////////////// Create User////////////////////////////////
 ////////////////////////// Create User////////////////////////////////
 exports.createUser = catchAsync(async (req, res, next) => {
-  const { email, password, confirmPassword, name } = req.body;
+  const { email, password, confirmPassword, name, role } = req.body;
+  const roles = ["user", "staff"];
   if (!email || !password || !confirmPassword)
     return next(new AppError("Please provide email and password", 400));
 
   if (password !== confirmPassword)
     return next(new AppError("Passwords don't match try again", 400));
-
+  console.log(role);
+  if (!roles.includes(role.toLowerCase()))
+    return next(new AppError("Invalid role", 400));
   const user = await User.findOne({ email: RegExp(`^${email}$`, "i") });
 
   if (user)
@@ -43,6 +46,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
     email: email.toLowerCase(),
     password,
     name,
+    role: role.toLowerCase(),
   });
 
   const jwt = generateJwt(newUser._id);
@@ -87,7 +91,7 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async function (req, res, next) {
   const jwt =
     req.headers?.cookie?.split("=")[1] ||
-    req.headers.authorization.split(" ")?.at(1);
+    req.headers?.authorization?.split(" ")?.at(1);
   if (!jwt) return next(new AppError("Please login first", 401));
 
   const userId = getIDFromToken(jwt);
@@ -103,10 +107,16 @@ exports.protect = catchAsync(async function (req, res, next) {
 ////////////////////////// Check role////////////////////////////////
 exports.checkRole = function (role) {
   return catchAsync(async (req, res, next) => {
-    if (role !== req?.user?.role)
+    const roles = role?.split(" ");
+
+    // Check if user's role matches any of the roles in the array
+    const isVerified = roles.includes(req?.user?.role);
+
+    if (!isVerified) {
       return next(
-        new AppError("You are not allowed to perform this action", 400)
+        new AppError("You don't have access to perform this action", 400)
       );
+    }
 
     next();
   });
@@ -120,7 +130,10 @@ exports.getUser = function (req, res, next) {
 };
 
 exports.getAllUsers = catchAsync(async function (req, res, next) {
-  const users = await User.find({ name: { $exists: true, $ne: null } });
+  const users = await User.find({
+    name: { $exists: true, $ne: null },
+    role: "user",
+  });
 
   res.status(200).json({
     message: "success",

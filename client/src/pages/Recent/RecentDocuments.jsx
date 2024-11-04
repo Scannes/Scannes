@@ -85,13 +85,13 @@ export default function RecentDocuments() {
   if (documents.length === 0)
     return (
       <h3 className="text-xl text-[#9A9A9A] font-normal text-center mt-10">
-        No Recent Documents
+        Keine zuletzt verwendeten Dokumente
       </h3>
     );
 
   return (
     <div className="p-7">
-      <h3 className="text-xl text-[#9A9A9A] font-normal">Recent</h3>
+      <h3 className="text-xl text-[#9A9A9A] font-normal">Zuletzt</h3>
 
       {/* <div className="w-full max-w-[400px] overflow-hidden relative h-[300px]">
         {documents.map(
@@ -165,7 +165,7 @@ export default function RecentDocuments() {
       </div>
 
       <div className="mt-4">
-        <h3 className="text-xl text-[#9A9A9A] font-normal">Documents</h3>
+        <h3 className="text-xl text-[#9A9A9A] font-normal">Dokumente</h3>
 
         <div className="flex gap-4 flex-col mt-3">
           {documents.map((document) => (

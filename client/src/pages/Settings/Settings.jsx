@@ -47,7 +47,7 @@ export default function Settings() {
     setCameraActive(false);
   }
 
-  if (role === "admin" && user) navigate("/admin");
+  if ((role === "admin" || role === "staff") && user) navigate("/admin");
   if (!user) navigate("/login");
 
   return (
@@ -68,7 +68,7 @@ export default function Settings() {
             handler={updateCameraOnStartUp}
             svg={<CameraSvg width={30} height={25} />}
           >
-            Start camera at start up
+            Starten Sie die Kamera beim Start.
           </SettingComponent>
         )}
 
@@ -76,7 +76,7 @@ export default function Settings() {
           active={deleteActive}
           svg={<BinSvg width={30} height={30} />}
         >
-          Confirm on swipe delete
+          Bestätigen Sie das Löschen durch Wischen.
         </SettingComponent>
 
         <SettingComponent
@@ -85,23 +85,23 @@ export default function Settings() {
           handler={updateWalkthrough}
           svg={<PointerSvg width={30} height={30} />}
         >
-          Show walkthrough at launch
+          Zeigen Sie die Einführung beim Start.
         </SettingComponent>
 
         <SettingComponent
           to="#"
           svg={<PrivacyPolicySvg width={30} height={30} />}
         >
-          Privacy Policy
+          Datenschutzerklärung,
         </SettingComponent>
         <SettingComponent
           to="#"
           svg={<TermsAndConditionsSvg width={30} height={30} />}
         >
-          Terms & Conditions
+          Allgemeine Geschäftsbedingungen
         </SettingComponent>
         <button onClick={() => logout()}>
-          <SettingComponent to="#">Logout</SettingComponent>
+          <SettingComponent to="#">Abmelden</SettingComponent>
         </button>
       </div>
 

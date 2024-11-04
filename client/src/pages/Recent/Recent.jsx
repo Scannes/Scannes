@@ -10,7 +10,7 @@ export default function Recent() {
   const role = useSelector((state) => state.user?.user?.role);
   const user = useSelector((state) => state.user?.user);
   const navigate = useNavigate();
-  if (role === "admin" && user) navigate("/admin");
+  if ((role === "admin" || role === "staff") && user) navigate("/admin");
   if (!user) navigate("/login");
   return (
     <section className="pb-[80px] md:pb-5">

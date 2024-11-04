@@ -7,7 +7,7 @@ const authController = require("../controllers/authController");
 router.get(
   "/",
   authController.protect,
-  authController.checkRole("admin"),
+  authController.checkRole("admin staff"),
   pdfController.pdf
 );
 router.post(
@@ -23,9 +23,26 @@ router.post(
 );
 
 // For admin
-router.get("/all", pdfController.allPdf);
+router.get(
+  "/all",
+  authController.protect,
 
-router.post("/delete", pdfController.deletePdf);
-router.post("/rename", pdfController.renamePdf);
+  authController.checkRole("admin staff"),
+  pdfController.allPdf
+);
+
+router.post(
+  "/delete",
+  authController.protect,
+  authController.checkRole("admin"),
+  pdfController.deletePdf
+);
+router.post(
+  "/rename",
+  authController.protect,
+  authController.checkRole("admin staff"),
+
+  pdfController.renamePdf
+);
 
 module.exports = router;

@@ -15,9 +15,10 @@ export default function DocumentFolders({ company = null }) {
     "november",
     "december",
   ];
+
   return (
     <div className="mt-5 pb-8">
-      <h3 className="font-semibold mb-2 text-lg">Document Folders</h3>
+      <h3 className="font-semibold mb-2 text-lg">Dokumentenordner</h3>
 
       <div>
         {" "}

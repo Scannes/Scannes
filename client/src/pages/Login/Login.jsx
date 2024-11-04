@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
-  if (user && user.role === "admin") navigate("/admin");
-  if (user && user.role !== "admin") navigate("/");
+  if (user && user.role === "admin" && user.role === "staff")
+    navigate("/admin");
+  if (user && user.role !== "admin" && user.role !== "staff") navigate("/");
   return (
     <div className="min-h-[80vh] w-full flex flex-col items-center justify-around py-[40px] md:flex-row md:min-h-screen">
       <div className="relative z-10 flex flex-col items-center justify-center">

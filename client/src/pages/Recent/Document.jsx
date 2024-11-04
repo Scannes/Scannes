@@ -26,7 +26,7 @@ export default function Document({ name, date, src, pages, path }) {
         <div className="flex items-center justify-between">
           <p className="capitalize">{uploadDate}</p>
           <p>
-            {pages} {pages > 1 ? "Pages" : "Page"}
+            {pages} {pages > 1 ? "Seiten" : "Seite"}
           </p>
         </div>
       </div>

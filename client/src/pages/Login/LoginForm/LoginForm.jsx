@@ -21,14 +21,14 @@ export default function LoginForm() {
 
       <input
         type="email"
-        placeholder="Enter your email"
+        placeholder="Geben Sie Ihre E-Mail-Adresse ein"
         onChange={(e) => setEmail(e.target.value.trim())}
         className="min-w-full px-4 py-2.5 mb-2 rounded-[10px] border-2 border-black/20 font-normal outline-none focus:border-blue"
       />
       <div className="relative h-fit rounded-[10px] overflow-hidden">
         <input
           type={show ? "text" : "password"}
-          placeholder="Enter your password"
+          placeholder="Geben Sie Ihr Passwort ein"
           onChange={(e) => setPassword(e.target.value.trim())}
           className="min-w-full px-4 py-2.5 pr-16  rounded-[10px] border-2 border-black/20 font-normal outline-none focus:border-blue"
         />
@@ -44,7 +44,7 @@ export default function LoginForm() {
       </div>
 
       <button className="mt-4 block mx-auto w-[130px] py-2 bg-blue text-white rounded-md">
-        Login
+        Anmelden
       </button>
     </form>
   );
