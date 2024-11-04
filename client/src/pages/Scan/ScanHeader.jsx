@@ -15,9 +15,9 @@ export default function ScanHeader() {
         </button>
         <h3 className="text-blue text-2xl">Scanner</h3>
       </div>
-      <button className="cursor-pointer transition-all hover:opacity-50">
+      {/* <button className="cursor-pointer transition-all hover:opacity-50">
         <SearchSvg width={30} height={30} />
-      </button>
+      </button> */}
     </div>
   );
 }

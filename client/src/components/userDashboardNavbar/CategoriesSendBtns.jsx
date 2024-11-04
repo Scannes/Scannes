@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CategoriesButton from "./CategoriesButton";
 import SendButton from "./SendButton";
 
@@ -11,9 +11,10 @@ export default function CategoriesSendBtns() {
   const images =
     user.croppedImg.length > 0 ? user.croppedImg : user.orignalImage;
   const documentName = user.imageName;
+  const dispatch = useDispatch();
 
   function handler() {
-    createPdfAndUploadToServer(images, documentName, category);
+    createPdfAndUploadToServer(images, documentName, category, dispatch);
   }
 
   return (

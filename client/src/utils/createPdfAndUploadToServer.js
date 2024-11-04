@@ -1,5 +1,6 @@
 import { PDFDocument, rgb } from "pdf-lib";
 import { uploadPdfToServer } from "./userApi";
+import { setError } from "../slices/errorSlice";
 
 async function blobUrlToFile(blobUrl, fileName) {
   const response = await fetch(blobUrl);
@@ -7,16 +8,25 @@ async function blobUrlToFile(blobUrl, fileName) {
   return new File([blob], fileName, { type: blob.type });
 }
 
-export default async function exportAsPDF(images, documentName, category) {
+export default async function exportAsPDF(
+  images,
+  documentName,
+  category,
+  dispatch
+) {
   if (category.toLowerCase() === "none") {
-    console.log("Please select a category");
+    dispatch(
+      setError({
+        isError: true,
+        isActive: true,
+        message: "Please select a category",
+      })
+    );
     return;
   }
   if (!images || images.length === 0) return;
 
   const pdfDoc = await PDFDocument.create();
-
-  const padding = 70; // Add padding around the images
 
   let maxWidth = 0;
 
@@ -84,8 +94,8 @@ export default async function exportAsPDF(images, documentName, category) {
       imageDataUrl = canvas.toDataURL("image/png"); // Convert to PNG
     }
 
-    const pageWidth = maxWidth + padding * 2;
-    const pageHeight = img.height + padding * 2;
+    const pageWidth = maxWidth;
+    const pageHeight = img.height;
     const page = pdfDoc.addPage([pageWidth, pageHeight]);
 
     // Ensure the background is white
@@ -98,7 +108,7 @@ export default async function exportAsPDF(images, documentName, category) {
     });
 
     // Calculate x-coordinate to center the image
-    const x = (maxWidth - img.width) / 2 + padding;
+    const x = (maxWidth - img.width) / 2;
 
     // Handle PNG and JPEG images
     let embeddedImage;
@@ -116,7 +126,6 @@ export default async function exportAsPDF(images, documentName, category) {
 
     page.drawImage(embeddedImage, {
       x: x,
-      y: padding,
       width: img.width,
       height: img.height,
     });

@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login/Login";
 import OnBoard from "./pages/OnBoard/OnBoard";
@@ -16,6 +20,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Month from "./pages/Month/Month";
 import { toggleCamera } from "./slices/userSlice";
+import Cookies from "js-cookie";
 
 const router = createBrowserRouter([
   {
@@ -84,8 +89,11 @@ export default function App() {
   const startup = localStorage.getItem("cameraAtStartup");
   const walkthrough = localStorage.getItem("walkthrough") == "true";
   const user = useSelector((state) => state.user.user);
-
+  const jwt = Cookies.get("jwt");
   useEffect(() => {
+    if (!jwt && window.location.pathname !== "/login")
+      window.location = "/login";
+
     if (walkthrough && window.location.pathname !== "/onboard") {
       window.location = "onboard";
     }
@@ -98,7 +106,7 @@ export default function App() {
       window.location = "/";
       // dispatch(toggleCamera(startup == "true"));
     }
-  }, [startup, user?.role, walkthrough]);
+  }, [startup, user?.role, walkthrough, jwt]);
 
   return <RouterProvider router={router} />;
 }

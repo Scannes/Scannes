@@ -117,8 +117,11 @@ export default function RecentDocuments() {
               i < 3 && (
                 <RecentDocument
                   src={document.img}
-                  index={i}
+                  name={document.name}
                   path={document.path}
+                  date={document.date}
+                  pages={document.pages}
+                  index={i}
                   zIndex={documents.length - i}
                   key={document.name + document.time}
                 />
@@ -126,18 +129,38 @@ export default function RecentDocuments() {
           )}
         </div>
         <div className="relative p-[20px] hidden md:block">
-          <Slider s {...settings}>
-            {documents.map((document, i) => (
+          {documents.length === 0 &&
+            documents.map((document, i) => (
               <RecentDocument
                 src={document.img}
-                index={i}
-                slider={true}
+                name={document.name}
                 path={document.path}
+                date={document.date}
+                pages={document.pages}
+                index={i}
                 zIndex={documents.length - i}
                 key={document.name + document.time}
+                slider={true}
               />
             ))}
-          </Slider>
+
+          {documents.length > 1 && (
+            <Slider s {...settings}>
+              {documents.map((document, i) => (
+                <RecentDocument
+                  src={document.img}
+                  name={document.name}
+                  path={document.path}
+                  date={document.date}
+                  pages={document.pages}
+                  index={i}
+                  zIndex={documents.length - i}
+                  key={document.name + document.time}
+                  slider={true}
+                />
+              ))}
+            </Slider>
+          )}
         </div>
       </div>
 

@@ -17,16 +17,26 @@ export default function RecentDocument({
   const scale = 100 - (index - 1) * 15;
   if (slider)
     return (
-      <div className="p-2 h-full">
+      <div className="p-2 h-full rounded-md overflow-hidden">
         <Link
           to={`${BACKEND_URL}/file/${path}`}
-          className="h-full"
+          className="h-full block bg-[#f4f4f4]"
           target="_blank"
         >
           <img
             src={`${BACKEND_URL}/img/${src}`}
-            className="h-[300px] w-full  object-cover object-left-top "
+            className="h-[200px] rounded-md w-full  object-cover object-left-top "
           />
+          <div className="px-4 py-4">
+            <h4 className="text-lg line-clamp-1 font-medium">{name}</h4>
+
+            <div className="flex items-center justify-between">
+              <p className="text-[#9A9A9A] capitalize">{uploadDate} </p>
+              <p>
+                {pages} {pages > 1 ? "Pages" : "Page"}
+              </p>
+            </div>
+          </div>
         </Link>
       </div>
     );

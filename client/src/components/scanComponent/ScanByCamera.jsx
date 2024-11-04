@@ -13,7 +13,9 @@ export default function ScanByCamera({ setDocumentName, closeModal }) {
   async function startCamera() {
     setIsCameraActive(true);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+      });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -21,7 +23,6 @@ export default function ScanByCamera({ setDocumentName, closeModal }) {
       console.error("Error accessing the camera:", error);
     }
   }
-  console.log("gg");
   const cam = useSelector((state) => state.user.cameraAtStart);
   useEffect(() => {
     const cameraAtStartup = localStorage.getItem("cameraAtStartup") == "true";

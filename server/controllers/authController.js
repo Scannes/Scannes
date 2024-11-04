@@ -39,7 +39,11 @@ exports.createUser = catchAsync(async (req, res, next) => {
   const byName = await User.findOne({ name: RegExp(`^${name}$`, "i") });
   if (byName)
     return next(new AppError("User with this name already exists", 400));
-  const newUser = await User.create({ email, password, name });
+  const newUser = await User.create({
+    email: email.toLowerCase(),
+    password,
+    name,
+  });
 
   const jwt = generateJwt(newUser._id);
   res.cookie("jwt", jwt);
@@ -59,7 +63,9 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password)
     return next(new AppError("Email and password are required", 400));
 
-  const user = await User.findOne({ email }).select("email password role");
+  const user = await User.findOne({
+    email: email.toLowerCase(),
+  }).select("email password role");
   if (!user) return next(new AppError("No user found with this email", 404));
 
   const passwordsMatch = await user.comparePasswords(password);

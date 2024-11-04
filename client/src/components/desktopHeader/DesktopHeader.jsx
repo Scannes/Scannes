@@ -1,7 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import DocumentsSvg from "../svgs/DocumentsSvg";
 import ScanSvg from "../svgs/ScanSvg";
 import SettingsSvg from "../svgs/SettingsSvg";
+import handleImageUpload from "../../pages/Scan/handleImageUpload";
 
 export default function DesktopHeader() {
   return (
@@ -18,22 +19,31 @@ export default function DesktopHeader() {
 
 function DesktopLinks() {
   const location = useLocation()?.pathname;
-
+  const navigate = useNavigate();
   return (
     <nav className=" flex items-center justify-evenly gap-1">
-      <Link
+      <label
         to="/"
+        id="file-upload-g"
         className={`cursor-pointer transition-all hover:opacity-50 flex items-center justify-center  gap-2 px-5 py-2 rounded-md ${
           location === "/" ? "bg-blue text-white" : "text-black"
         }`}
       >
+        <input
+          type="file"
+          accept="image/*"
+          className="opacity-0 hidden"
+          id="file-upload-g"
+          onChange={(e) => handleImageUpload(e, true, navigate)}
+          multiple={true}
+        />
         <ScanSvg
           color={location === "/" ? "white" : "black"}
           width={15}
           height={15}
         />
         Scan
-      </Link>
+      </label>
       <Link
         to="/recent"
         className={`cursor-pointer transition-all hover:opacity-50 flex items-center justify-center  gap-2 px-5 py-2 rounded-md ${

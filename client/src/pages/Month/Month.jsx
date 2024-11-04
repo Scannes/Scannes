@@ -39,7 +39,7 @@ export default function Month() {
   ];
   const index = months.indexOf(month.toLowerCase());
 
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear());
   // Generate an array from 2024 to the current year
   const years = Array.from(
     { length: new Date().getFullYear() - 2024 + 1 },
@@ -58,7 +58,7 @@ export default function Month() {
   };
 
   useEffect(() => {
-    if (category && year.length > 0) {
+    if (category) {
       getFilesByMonthAndCategory(
         `${year}-${index + 1}`,
         category,
@@ -85,9 +85,6 @@ export default function Month() {
           onChange={handleYearChange}
           className="px-5 py-2 bg-blue text-white rounded-md outline-none border-none text-[18px] cursor-pointer"
         >
-          <option className="hidden" value="">
-            Select Year
-          </option>
           {years.map((year) => (
             <option className="bg-[#f4f4f4] text-blue" key={year} value={year}>
               {year}

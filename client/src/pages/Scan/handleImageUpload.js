@@ -17,7 +17,7 @@ function setDocumentName() {
   dispatch(setImageName(documentName));
 }
 
-export default function handleImageUpload(e) {
+export default function handleImageUpload(e, redirect = false, navigate) {
   e.preventDefault();
   const target = e.target;
   if (!target) return;
@@ -33,4 +33,7 @@ export default function handleImageUpload(e) {
   });
   // closeModal();
   setDocumentName();
+  if (redirect) {
+    navigate("/");
+  }
 }

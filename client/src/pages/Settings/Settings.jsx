@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MobileHeader from "../../components/mobileHeader/MobileHeader";
 import SettingComponent from "./SettingComponent";
 import SettingsHeader from "./SettingsHeader";
@@ -17,15 +17,23 @@ import { useNavigate } from "react-router-dom";
 export default function Settings() {
   const [galleryActive, setGalleryActive] = useState(false);
   const [cameraActive, setCameraActive] = useState(
-    localStorage.getItem("cameraAtStartup") == "true" ? true : false
+    localStorage.getItem("cameraAtStartup") === "true"
   );
   const [deleteActive, setDeleteActive] = useState(false);
   const [walkThroughActive, setWalkThroughActive] = useState(
-    localStorage.getItem("walkthrough") == "true" ? true : false
+    localStorage.getItem("walkthrough") === "true"
   );
+  const [isIOS, setIsIOS] = useState(false);
   const role = useSelector((state) => state.user?.user?.role);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
+
+  // Function to detect if the device is running iOS
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent;
+    const iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+    setIsIOS(iOS);
+  }, []);
 
   function updateCameraOnStartUp() {
     localStorage.setItem("cameraAtStartup", !cameraActive);
@@ -41,8 +49,9 @@ export default function Settings() {
 
   if (role === "admin" && user) navigate("/admin");
   if (!user) navigate("/login");
+
   return (
-    <section>
+    <section className="pb-[80px]">
       <div className="hidden md:block">
         <DesktopHeader />
       </div>
@@ -51,26 +60,20 @@ export default function Settings() {
         <SettingsHeader />
       </div>
       <div className="mt-5 p-5 flex flex-col gap-4">
-        {/* <SettingComponent
-          active={galleryActive}
-          setActive={setGalleryActive}
-          svg={<CropSvg width={30} height={30} />}
-        >
-          Allow gallery photo editing
-        </SettingComponent> */}
-
-        <SettingComponent
-          active={cameraActive}
-          setActive={setCameraActive}
-          handler={updateCameraOnStartUp}
-          svg={<CameraSvg width={30} height={25} />}
-        >
-          Start camera at start up
-        </SettingComponent>
+        {/* Conditionally render Start Camera at Startup for non-iOS devices */}
+        {!isIOS && (
+          <SettingComponent
+            active={cameraActive}
+            setActive={setCameraActive}
+            handler={updateCameraOnStartUp}
+            svg={<CameraSvg width={30} height={25} />}
+          >
+            Start camera at start up
+          </SettingComponent>
+        )}
 
         <SettingComponent
           active={deleteActive}
-          // setActive={setDeleteActive}
           svg={<BinSvg width={30} height={30} />}
         >
           Confirm on swipe delete
