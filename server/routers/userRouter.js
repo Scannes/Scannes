@@ -11,7 +11,18 @@ router.post(
 );
 router.post("/login", authController.login);
 router.get("/", authController.protect, authController.getUser);
-router.get("/users", authController.protect, authController.getAllUsers);
+router.get(
+  "/users",
+  authController.protect,
+  authController.checkRole("admin staff"),
+  authController.getAllUsers
+);
+router.get(
+  "/staff",
+  authController.protect,
+  authController.checkRole("admin"),
+  authController.getAllStaff
+);
 router.delete(
   "/:name",
   authController.protect,

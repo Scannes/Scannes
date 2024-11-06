@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   users: [],
+  staff: [],
   loading: false,
   orignalImage: [],
   croppedImg: [],
@@ -59,6 +60,9 @@ const userSlice = createSlice({
     setUsers(state, action) {
       state.users = action.payload;
     },
+    setStaff(state, action) {
+      state.staff = action.payload;
+    },
   },
 });
 
@@ -74,5 +78,6 @@ export const {
   setFiles,
   toggleCamera,
   setUsers,
+  setStaff,
 } = userSlice.actions;
 export default userSlice.reducer;

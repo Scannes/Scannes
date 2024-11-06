@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function CategoriesSendBtns() {
   const user = useSelector((state) => state.user);
+  const [isSending, setIsSending] = useState(false);
   const [category, setCategory] = useState("none");
   const images =
     user.croppedImg.length > 0 ? user.croppedImg : user.orignalImage;
@@ -14,7 +15,14 @@ export default function CategoriesSendBtns() {
   const dispatch = useDispatch();
 
   function handler() {
-    createPdfAndUploadToServer(images, documentName, category, dispatch);
+    setIsSending(true);
+    createPdfAndUploadToServer(
+      images,
+      documentName,
+      category,
+      dispatch,
+      setIsSending
+    );
   }
 
   return (
@@ -22,7 +30,9 @@ export default function CategoriesSendBtns() {
       <CategoriesButton category={category} setCategory={setCategory}>
         Categories
       </CategoriesButton>
-      <SendButton handler={handler}>Send</SendButton>
+      <SendButton handler={handler}>
+        {isSending ? "Sending..." : "Send"}
+      </SendButton>
     </div>
   );
 }

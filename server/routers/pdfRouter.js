@@ -21,6 +21,17 @@ router.post(
   ]),
   pdfController.uploadPdf
 );
+router.post(
+  "/pdf",
+  authController.protect,
+  pdfController.upload.fields([
+    {
+      name: "file",
+    },
+    // { name: "img" },
+  ]),
+  pdfController.uploadPdfOnly
+);
 
 // For admin
 router.get(

@@ -33,7 +33,7 @@ export default function UserDashboardNavbar({ open = false }) {
     );
   }
   return (
-    <nav className="fixed z-10 left-0 bottom-0 w-full bg-gradient-to-r from-[#2A8DDC] to-[#D474EB] py-4 flex items-center justify-evenly gap-5">
+    <nav className="fixed z-[20] left-0 bottom-0 w-full bg-gradient-to-r from-[#2A8DDC] to-[#D474EB] py-4 flex items-center justify-evenly gap-5">
       {!isOpen && (
         <Link
           to="/recent"

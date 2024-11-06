@@ -13,7 +13,6 @@ export default function RecentDocument({
   slider = false,
 }) {
   const uploadDate = formatDate(date);
-
   const scale = 100 - (index - 1) * 15;
   if (slider)
     return (

@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MobileHeader from "../../components/mobileHeader/MobileHeader";
 import SettingComponent from "./SettingComponent";
 import SettingsHeader from "./SettingsHeader";
-import CropSvg from "../../components/svgs/CropSvg";
-import CameraSvg from "../../components/svgs/CameraSvg";
 import BinSvg from "../../components/svgs/BinSvg";
 import PointerSvg from "../../components/svgs/PointerSvg";
 import PrivacyPolicySvg from "../../components/svgs/PrivacyPolicySvg";
@@ -15,36 +13,18 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
-  const [galleryActive, setGalleryActive] = useState(false);
-  const [cameraActive, setCameraActive] = useState(
-    localStorage.getItem("cameraAtStartup") === "true"
-  );
   const [deleteActive, setDeleteActive] = useState(false);
   const [walkThroughActive, setWalkThroughActive] = useState(
     localStorage.getItem("walkthrough") === "true"
   );
-  const [isIOS, setIsIOS] = useState(false);
   const role = useSelector((state) => state.user?.user?.role);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
 
   // Function to detect if the device is running iOS
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent;
-    const iOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-    setIsIOS(iOS);
-  }, []);
-
-  function updateCameraOnStartUp() {
-    localStorage.setItem("cameraAtStartup", !cameraActive);
-    localStorage.setItem("walkthrough", false);
-    setWalkThroughActive(false);
-  }
 
   function updateWalkthrough() {
     localStorage.setItem("walkthrough", !walkThroughActive);
-    localStorage.setItem("cameraAtStartup", false);
-    setCameraActive(false);
   }
 
   if ((role === "admin" || role === "staff") && user) navigate("/admin");
@@ -61,7 +41,7 @@ export default function Settings() {
       </div>
       <div className="mt-5 p-5 flex flex-col gap-4">
         {/* Conditionally render Start Camera at Startup for non-iOS devices */}
-        {!isIOS && (
+        {/* {!isIOS && (
           <SettingComponent
             active={cameraActive}
             setActive={setCameraActive}
@@ -70,7 +50,7 @@ export default function Settings() {
           >
             Starten Sie die Kamera beim Start.
           </SettingComponent>
-        )}
+        )} */}
 
         <SettingComponent
           active={deleteActive}

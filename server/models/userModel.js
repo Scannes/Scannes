@@ -6,7 +6,6 @@ const user = mongoose.Schema({
   email: {
     type: String,
     unique: [true, "A user with this email already exists."],
-    required: [true, "Email is required to create account."],
     validate: [validator.isEmail, "Email is invalid."],
   },
   password: {

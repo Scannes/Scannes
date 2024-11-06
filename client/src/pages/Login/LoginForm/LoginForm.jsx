@@ -20,7 +20,7 @@ export default function LoginForm() {
       <h3 className="text-lg mb-2">Anmelde Details</h3>
 
       <input
-        type="email"
+        type="text"
         placeholder="Geben Sie Ihre E-Mail-Adresse ein"
         onChange={(e) => setEmail(e.target.value.trim())}
         className="min-w-full px-4 py-2.5 mb-2 rounded-[10px] border-2 border-black/20 font-normal outline-none focus:border-blue"

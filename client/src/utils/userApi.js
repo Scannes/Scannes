@@ -1,7 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import store from "../store";
-import { loginUserDetails, setFiles, setUsers } from "../slices/userSlice";
+import {
+  loginUserDetails,
+  setFiles,
+  setStaff,
+  setUsers,
+} from "../slices/userSlice";
 import { setError } from "../slices/errorSlice";
 const API_URL = import.meta.env.VITE_API_URL;
 const dispatch = store.dispatch;
@@ -29,7 +34,7 @@ export async function login(email, password) {
     );
   }
 }
-export async function signup(email, password, name, role) {
+export async function signup(password, name, role, email) {
   try {
     const jwt = Cookies.get("jwt");
     const res = await axios.post(
@@ -187,7 +192,8 @@ export async function uploadPdfToServer(
   documentName,
   img,
   pages,
-  category
+  category,
+  setIsSending
 ) {
   try {
     const jwt = Cookies.get("jwt");
@@ -225,6 +231,50 @@ export async function uploadPdfToServer(
         })
       );
     }
+  } finally {
+    setIsSending(false);
+  }
+}
+export async function uploadPdf(pdf, category, setIsSending) {
+  try {
+    const jwt = Cookies.get("jwt");
+    const formData = new FormData();
+    pdf.orgnalName = "ez.pdf";
+    // pdf.name = "ez.pdf";
+    console.log(pdf);
+    formData.append("file", pdf);
+    formData.append("category", category);
+    const res = await axios.post(`${API_URL}/pdf/pdf`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    window.location = "/recent";
+  } catch (err) {
+    if (err?.response?.data?.message?.includes("no such file")) {
+      dispatch(
+        setError({
+          isError: true,
+          isActive: true,
+          message: "Special characters cannot be used in file names",
+        })
+      );
+    } else {
+      console.log(err);
+      dispatch(
+        setError({
+          isError: true,
+          isActive: true,
+          message:
+            err?.response?.data?.message ||
+            "Something went wrong while fetching data.",
+        })
+      );
+    }
+  } finally {
+    setIsSending(false);
   }
 }
 export async function deleteFile(filename) {
@@ -293,6 +343,29 @@ export async function getAllUsers() {
     const names = res.data.data.map((user) => user.name);
 
     dispatch(setUsers(names));
+  } catch (err) {
+    dispatch(
+      setError({
+        isError: true,
+        isActive: true,
+        message:
+          err.response.data.message ||
+          "Something went wrong while fetching data.",
+      })
+    );
+  }
+}
+export async function getAllStaff() {
+  try {
+    const jwt = Cookies.get("jwt");
+    const res = await axios.get(`${API_URL}/users/staff`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    const names = res.data.data.map((user) => user.name);
+
+    dispatch(setStaff(names));
   } catch (err) {
     dispatch(
       setError({

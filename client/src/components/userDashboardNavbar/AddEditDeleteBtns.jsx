@@ -98,7 +98,22 @@ export default function AddEditDeleteBtns() {
   return (
     <div className="flex items-center justify-center gap-3 mb-3">
       <div>
-        {!isIOS ? (
+        <Button handler={() => setIsOpen(true)}>
+          <AddSvg height={25} />
+          <label
+            htmlFor="file-uploads-yk"
+            className="cursor-pointer absolute top-0 left-0 w-full h-full"
+          ></label>
+          <input
+            type="file"
+            accept="image/*"
+            className="opacity-0 hidden"
+            id="file-uploads-yk"
+            onChange={handleImageUpload}
+            multiple={true}
+          />
+        </Button>
+        {/* {!isIOS ? (
           <>
             <Button handler={() => setIsOpen(true)}>
               <AddSvg height={25} />
@@ -123,16 +138,16 @@ export default function AddEditDeleteBtns() {
               multiple={true}
             />
           </Button>
-        )}
+        )} */}
       </div>
       <div className="flex items-center gap-3 rk">
         <Button handler={toggleDeleteActive}>
           {/* <BinSvg height={25} color="white" /> */}
           <DeleteSvg height={22} color="white" no={2} />
         </Button>
-        <Button handler={toggleNameChangeActive}>
+        {/* <Button handler={toggleNameChangeActive}>
           <PencilSvg height={18} />
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

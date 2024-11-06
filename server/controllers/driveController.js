@@ -49,8 +49,24 @@ const getContentType = (fileName) => {
   return contentTypes[extension] || "application/octet-stream";
 };
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 // Upload file to OneDrive
 exports.uploadFileToOneDrive = catchAsync(async (req, res, next) => {
+  const year = new Date().getFullYear();
+  const month = months[new Date().getMonth()];
   const { fileName, folderName, organization } = req.body;
   if (!fileName || !folderName || !organization)
     return next(
@@ -71,7 +87,7 @@ exports.uploadFileToOneDrive = catchAsync(async (req, res, next) => {
     const contentType = getContentType(fileName);
 
     const response = await axios.put(
-      `https://graph.microsoft.com/v1.0/me/drive/root:/Scannes.ch/${organization}/${folderName}/${fileName}:/content`,
+      `https://graph.microsoft.com/v1.0/me/drive/root:/Scannes.ch/${organization}/${year}/${month}/${folderName}/${fileName}:/content`,
       fileContent,
       {
         headers: {

@@ -10,6 +10,7 @@ export default function ScanImagesExists({ images, documentName }) {
   const dispatch = useDispatch();
   const [isCropActive, setIsCropActive] = useState(false);
   const [category, setCategory] = useState("none");
+  const [isSending, setIsSending] = useState(false);
 
   // Handle image deletion
   const handleDelete = (i) => {
@@ -36,12 +37,19 @@ export default function ScanImagesExists({ images, documentName }) {
         ))}
 
       <button
-        onClick={() =>
-          createPdfAndUploadToServer(images, documentName, category, dispatch)
-        }
+        onClick={() => {
+          setIsSending(true);
+          createPdfAndUploadToServer(
+            images,
+            documentName,
+            category,
+            dispatch,
+            setIsSending
+          );
+        }}
         className="w-fit ml-auto px-10 py-2 bg-blue text-white rounded-md mt-4 hidden md:block"
       >
-        Send
+        {isSending ? "Sending..." : "Send"}
       </button>
     </div>
   );

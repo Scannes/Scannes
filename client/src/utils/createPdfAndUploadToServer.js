@@ -1,6 +1,9 @@
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { uploadPdfToServer } from "./userApi";
 import { setError } from "../slices/errorSlice";
+
+const A4_WIDTH = 595.28;
+const A4_HEIGHT = 841.89;
 
 async function blobUrlToFile(blobUrl, fileName) {
   const response = await fetch(blobUrl);
@@ -8,11 +11,27 @@ async function blobUrlToFile(blobUrl, fileName) {
   return new File([blob], fileName, { type: blob.type });
 }
 
+async function preprocessImage(imageUrl) {
+  const img = new Image();
+  img.src = imageUrl;
+
+  await new Promise((resolve) => (img.onload = resolve));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+
+  return canvas.toDataURL("image/png");
+}
+
 export default async function exportAsPDF(
   images,
   documentName,
   category,
-  dispatch
+  dispatch,
+  setIsSending
 ) {
   if (category.toLowerCase() === "none") {
     dispatch(
@@ -28,120 +47,77 @@ export default async function exportAsPDF(
 
   const pdfDoc = await PDFDocument.create();
 
-  let maxWidth = 0;
+  // Get current date formatted as desired
+  const date = new Date().toLocaleDateString();
+  const formattedDate = `${category}  ${date}`;
 
-  // Step 1: Find the maximum width among all images
+  // Load the font
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+  // Add each image to an A4-sized PDF page
   for (const image of images) {
-    let imageDataUrl = image;
-
-    // Check if the image is already in base64 format (starts with "data:image/")
-    if (!image.startsWith("data:image/")) {
-      // If it's a blob URL, fetch the data and convert to Data URL
-      const blob = await fetch(image).then((res) => res.blob());
-      imageDataUrl = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    }
-
+    const imageDataUrl = await preprocessImage(image);
     const img = new Image();
     img.src = imageDataUrl;
 
-    // Wait for the image to load
-    await new Promise((resolve) => {
-      img.onload = resolve;
-    });
+    await new Promise((resolve) => (img.onload = resolve));
 
-    // Update maxWidth if this image is wider
-    maxWidth = Math.max(maxWidth, img.width);
-  }
+    // Calculate the scale factor to fit the image within the A4 page dimensions
+    const scale = Math.min(A4_WIDTH / img.width, A4_HEIGHT / img.height);
 
-  // Step 2: Add each image to the PDF with proper centering
-  for (const image of images) {
-    let imageDataUrl = image;
+    const scaledWidth = img.width * scale;
+    const scaledHeight = img.height * scale;
 
-    // Check if the image is already in base64 format (starts with "data:image/")
-    if (!image.startsWith("data:image/")) {
-      // If it's a blob URL, fetch the data and convert to Data URL
-      const blob = await fetch(image).then((res) => res.blob());
-      imageDataUrl = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    }
+    const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT]);
 
-    const img = new Image();
-    img.src = imageDataUrl;
-
-    // Wait for the image to load
-    await new Promise((resolve) => {
-      img.onload = resolve;
-    });
-
-    // Step 3: Convert non-PNG/JPEG images to PNG
-    const isPng = imageDataUrl.startsWith("data:image/png");
-    const isJpg = imageDataUrl.startsWith("data:image/jpeg");
-
-    // If the image is neither PNG nor JPEG, convert it to PNG using canvas
-    if (!isPng && !isJpg) {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      imageDataUrl = canvas.toDataURL("image/png"); // Convert to PNG
-    }
-
-    const pageWidth = maxWidth;
-    const pageHeight = img.height;
-    const page = pdfDoc.addPage([pageWidth, pageHeight]);
-
-    // Ensure the background is white
+    // Optional: Set a background color (white in this example)
     page.drawRectangle({
       x: 0,
       y: 0,
-      width: pageWidth,
-      height: pageHeight,
+      width: A4_WIDTH,
+      height: A4_HEIGHT,
       color: rgb(1, 1, 1), // White background
     });
 
-    // Calculate x-coordinate to center the image
-    const x = (maxWidth - img.width) / 2;
+    // Center the image on the page
+    const x = (A4_WIDTH - scaledWidth) / 2;
+    const y = A4_HEIGHT - scaledHeight; // Position image at the top
 
-    // Handle PNG and JPEG images
-    let embeddedImage;
-    if (imageDataUrl.startsWith("data:image/png")) {
-      const pngImageBytes = await fetch(imageDataUrl).then((res) =>
-        res.arrayBuffer()
-      );
-      embeddedImage = await pdfDoc.embedPng(pngImageBytes);
-    } else if (imageDataUrl.startsWith("data:image/jpeg")) {
-      const jpgImageBytes = await fetch(imageDataUrl).then((res) =>
-        res.arrayBuffer()
-      );
-      embeddedImage = await pdfDoc.embedJpg(jpgImageBytes);
-    }
+    const imgBytes = await fetch(imageDataUrl).then((res) => res.arrayBuffer());
+    const embeddedImage = await pdfDoc.embedPng(imgBytes);
 
     page.drawImage(embeddedImage, {
-      x: x,
-      width: img.width,
-      height: img.height,
+      x,
+      y,
+      width: scaledWidth,
+      height: scaledHeight,
+    });
+
+    // Draw the background for the date overlay
+    const textSize = 12; // Font size for the date text
+    const textWidth = font.widthOfTextAtSize(formattedDate, textSize);
+    const textX = A4_WIDTH - textWidth - 10; // 10 points from the right edge
+    const textY = A4_HEIGHT - textSize - 5; // Move down by 10px for text
+
+    // Draw the date text on top of the rectangle
+    page.drawText(formattedDate, {
+      x: textX,
+      y: textY,
+      size: textSize,
+      font: font,
+      color: rgb(0, 0, 0), // Black color
     });
   }
 
   const pdfBytes = await pdfDoc.save();
-
-  // Create a Blob for sending to the server
   const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
 
-  // Call uploadPdfToServer and pass the Blob
   uploadPdfToServer(
     pdfBlob,
     documentName,
     await blobUrlToFile(images?.at(0), new Date().getTime()),
     images.length,
-    category
+    category,
+    setIsSending
   );
 }

@@ -7,6 +7,7 @@ import Companies from "./Companies";
 import DocumentFolders from "../../components/documentFolders.jsx/DocumentFolders";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Staff from "./Staff";
 const filesPerPage = import.meta.env.VITE_ADMIN_FILES_PER_PAGE;
 
 export default function AdminRecent() {
@@ -41,9 +42,20 @@ export default function AdminRecent() {
 
   if (files?.length === 0)
     return (
-      <h3 className="font-semibold mb-2 text-lg text-center h-[80vh] flex items-center justify-center">
-        Noch keine Dokumente
-      </h3>
+      <>
+        <div className="max-w-[1500px] block mx-auto mt-3 ">
+          <h1 className="font-semibold text-[22px] px-5 py-3 bg-gradient-to-r from-[#2A8DDC] to-[#D474EB] rounded-md mb-3 text-white">
+            Willkommen zurück,{" "}
+            <span className="capitalize underline ">
+              {user?.user?.name?.toLowerCase() || "Admin"}
+            </span>
+          </h1>
+        </div>
+
+        <h3 className="font-semibold mb-2 text-lg text-center h-[80vh] flex items-center justify-center">
+          Noch keine Dokumente
+        </h3>
+      </>
     );
 
   return (
@@ -51,6 +63,16 @@ export default function AdminRecent() {
       <h3 className="font-semibold mb-2 text-lg">
         Zuletzt verwendete Dokumente
       </h3>
+
+      <div className="max-w-[1500px] block mx-auto mt-3 ">
+        <h1 className="font-semibold text-[22px] px-5 py-3 bg-gradient-to-r from-[#2A8DDC] to-[#D474EB] rounded-md mb-3 text-white">
+          Willkommen zurück,{" "}
+          <span className="capitalize underline ">
+            {user?.user?.name?.toLowerCase() || "Admin"}
+          </span>
+        </h1>
+      </div>
+
       <div className="flex md:flex-row flex-col gap-4 md:gap-2 items-end justify-between mb-5">
         <RecentDocuments />
         <div className="md:hidden relative min-w-[270px] max-w-[400px] w-[40%]">
@@ -69,6 +91,7 @@ export default function AdminRecent() {
       />
 
       <Companies />
+      {role === "admin" && <Staff />}
       <DocumentFolders />
     </div>
   );

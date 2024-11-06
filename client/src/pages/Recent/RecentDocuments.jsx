@@ -129,7 +129,7 @@ export default function RecentDocuments() {
           )}
         </div>
         <div className="relative p-[20px] hidden md:block">
-          {documents.length === 0 &&
+          {documents.length === 1 &&
             documents.map((document, i) => (
               <RecentDocument
                 src={document.img}

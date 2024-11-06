@@ -21,7 +21,15 @@ export default function Recent() {
         <MobileHeader />
         <RecentHeader />
       </div>
-      <RecentDocuments />
+      <div className="max-w-[1500px] block mx-auto mt-3 ">
+        <h1 className="font-semibold text-[22px] px-5 py-3 bg-gradient-to-r from-[#2A8DDC] to-[#D474EB] rounded-md mb-3 text-white">
+          Willkommen zurück,{" "}
+          <span className="capitalize underline ">
+            {user?.name?.toLowerCase()}
+          </span>
+        </h1>
+        <RecentDocuments />
+      </div>
       <div className="md:hidden">
         <UserDashBoardNavbar />
       </div>

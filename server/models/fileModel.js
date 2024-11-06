@@ -11,7 +11,6 @@ const fileSchema = new mongoose.Schema({
   },
   img: {
     type: String,
-    required: [true, "Image is required."],
   },
   category: String,
   user: mongoose.Schema.Types.ObjectId,

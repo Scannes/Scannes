@@ -18,9 +18,12 @@ export default function AdminNavbar() {
     if (!target) return;
 
     const name = target.name.value;
-    const email = target.email.value;
+    const email = target?.email?.value;
     const password = target.password.value;
-    signup(email, password, name, role);
+    if (role === "staff") {
+      signup(password, name, role, email);
+    }
+    signup(password, name, role);
     setIsActive(false);
   }
 
@@ -47,15 +50,17 @@ export default function AdminNavbar() {
             } ein`}
             className="outline-none border-none p-3 rounded-md"
           />
-          <input
-            required={true}
-            type="email"
-            id="email"
-            placeholder={`Geben Sie die E-Mail-Adresse des ${
-              role.toLowerCase() === "user" ? "Kunden" : "Mitarbeiters"
-            } ein`}
-            className="outline-none border-none p-3 rounded-md"
-          />
+          {role.toLowerCase() != "user" && (
+            <input
+              required={true}
+              type="email"
+              id="email"
+              placeholder={`Geben Sie die E-Mail-Adresse des ${
+                role.toLowerCase() === "user" ? "Kunden" : "Mitarbeiters"
+              } ein`}
+              className="outline-none border-none p-3 rounded-md"
+            />
+          )}
           <input
             required={true}
             type="text"

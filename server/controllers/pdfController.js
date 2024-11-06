@@ -25,6 +25,7 @@ const storage = multer.diskStorage({
         }`
       );
     } else {
+      console.log(file);
       cb(null, `${file.originalname}`);
     }
   },
@@ -58,6 +59,25 @@ exports.uploadPdf = catchAsync(async function (req, res, next) {
   });
 });
 
+exports.uploadPdfOnly = catchAsync(async function (req, res, next) {
+  const pdf = req.files.file;
+  const category = req.body.category;
+  const name = pdf?.at(0)?.originalname.replace(/\.pdf$/i, "");
+
+  const file = await File.create({
+    name: name,
+    path: pdf?.at(0)?.originalname,
+    img: "default.jfif",
+    user: req.user._id,
+    date: new Date(),
+    company: req.user.name,
+    category,
+  });
+  res.status(200).json({
+    message: "Files Uploaded successfully",
+    file,
+  });
+});
 exports.pdf = function (req, res, next) {
   const filePath = path.join(__dirname, "../uploads", req.query.filename);
   res.sendFile(filePath);
