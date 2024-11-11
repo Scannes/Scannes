@@ -16,9 +16,7 @@ export default function Scan() {
   if (!user) navigate("/login");
   return (
     <div className="pb-[150px]">
-      <div className="md:hidden">
-        <MobileHeader />
-      </div>
+      <div className="md:hidden">{/* <MobileHeader /> */}</div>
       <div className="hidden md:block">
         <DesktopHeader />
       </div>

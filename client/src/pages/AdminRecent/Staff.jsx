@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import DeleteCompanySvg from "../../components/svgs/DeleteCompanySvg";
-import { deleteUser, getAllStaff, getAllUsers } from "../../utils/userApi";
+import {
+  addToCompany,
+  deleteUser,
+  getAllStaff,
+  getAllUsers,
+} from "../../utils/userApi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export default function Staff() {
@@ -37,9 +42,19 @@ export default function Staff() {
 
 function Company({ name }) {
   const [deleteActive, setDeleteActive] = useState(false);
-
+  const [isAssignActive, setIsAssignActive] = useState(false);
+  const [companyNameToAssign, setCompanyNameToAssign] = useState("");
   function toggleDelete() {
     setDeleteActive(!deleteActive);
+  }
+
+  function handleCompanyAssign(e) {
+    e.stopPropagation();
+    setIsAssignActive(!isAssignActive);
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    addToCompany(companyNameToAssign, name);
   }
   if (deleteActive)
     return (
@@ -61,8 +76,35 @@ function Company({ name }) {
         </div>
       </>
     );
+
+  if (isAssignActive)
+    return (
+      <>
+        <div
+          onClick={handleCompanyAssign}
+          className="fixed top-0 left-0 h-full w-full bg-black/50 z-[10000]"
+        ></div>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-blue fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000001] w-[300px] p-3 rounded-md"
+        >
+          <input
+            type="text"
+            placeholder="Name der Firma..."
+            onChange={(e) => setCompanyNameToAssign(e.target.value.trim())}
+            className="w-full px-3 py-2 outline-none rounded-md"
+          />
+          <button className="w-full outline-none border-none px-3 py-2 rounded-md bg-white mt-2">
+            Bestätigen
+          </button>
+        </form>
+      </>
+    );
   return (
-    <div className="flex items-center justify-between px-8 py-3 gap-4 border-t border-[#ddd]">
+    <div
+      onClick={handleCompanyAssign}
+      className="flex items-center justify-between px-8 py-3 gap-4 border-t border-[#ddd]"
+    >
       <p>{name}</p>
       <button
         onClick={(e) => {

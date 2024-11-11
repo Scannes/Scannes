@@ -28,11 +28,11 @@ export default function Document({
   company = "",
   src,
   file,
+  isUploaded,
 }) {
   const role = useSelector((state) => state.user?.user?.role);
   const dateOfUpload = new Date(date);
   const uploadDateStr = formatDate(dateOfUpload);
-
   const [isRenameActive, setIsRenameActive] = useState(false);
   const [deleteActive, setDeleteActive] = useState(false);
 
@@ -156,9 +156,7 @@ export default function Document({
       <div
         className="grid gap-2"
         style={{
-          gridTemplateColumns: `repeat(${
-            role?.toLowerCase() === "admin" ? 5 : 4
-          },${role?.toLowerCase() === "admin" ? "80px" : "100px"})`,
+          gridTemplateColumns: `repeat(5,80px)`,
         }}
       >
         <Link
@@ -171,7 +169,9 @@ export default function Document({
         </Link>
         <button
           onClick={upload}
-          className="bg-[#ECECEC] h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
+          className={`${
+            isUploaded ? "bg-green-300" : "bg-[#ECECEC]"
+          } h-full w-full aspect-square rounded-lg text-blue text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10`}
         >
           <UploadSvg width={18} />
           Hochladen
@@ -191,15 +191,14 @@ export default function Document({
           <RenameSvg width={24} />
           Umbenennen
         </button>
-        {role?.toLowerCase() === "admin" && (
-          <button
-            onClick={toggleDelete}
-            className="bg-[#FFA5A5] h-full w-full aspect-square rounded-lg text-black text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
-          >
-            <DeleteSvg width={24} />
-            Löschen
-          </button>
-        )}
+
+        <button
+          onClick={toggleDelete}
+          className="bg-[#FFA5A5] h-full w-full aspect-square rounded-lg text-black text-[10px] flex flex-col items-center justify-center gap-1 transition-all hover:bg-black/10"
+        >
+          <DeleteSvg width={24} />
+          Löschen
+        </button>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 const axios = require("axios");
 const Token = require("../models/tokenModel");
+const File = require("../models/fileModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -75,6 +77,11 @@ exports.uploadFileToOneDrive = catchAsync(async (req, res, next) => {
         400
       )
     );
+
+  const file = await File.findOneAndUpdate(
+    { path: fileName },
+    { isUploaded: true }
+  );
 
   try {
     const accessToken = await getAccessToken(next); // Retrieve token from cache or database

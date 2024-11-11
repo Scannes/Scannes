@@ -11,6 +11,12 @@ router.post(
 );
 router.post("/login", authController.login);
 router.get("/", authController.protect, authController.getUser);
+router.post(
+  "/add-to-company",
+  authController.protect,
+  authController.checkRole("admin"),
+  authController.addCompany
+);
 router.get(
   "/users",
   authController.protect,

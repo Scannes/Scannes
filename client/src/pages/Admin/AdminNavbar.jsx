@@ -20,10 +20,12 @@ export default function AdminNavbar() {
     const name = target.name.value;
     const email = target?.email?.value;
     const password = target.password.value;
+    const company = target.company?.value;
+    const clientName = target.clientName?.value;
     if (role === "staff") {
       signup(password, name, role, email);
     }
-    signup(password, name, role);
+    signup(password, name, role, null, company, clientName);
     setIsActive(false);
   }
 
@@ -71,6 +73,24 @@ export default function AdminNavbar() {
             className="outline-none border-none p-3 rounded-md"
             minLength={7}
           />
+          {role.toLowerCase() === "user" && (
+            <>
+              <input
+                required={true}
+                type="text"
+                id="company"
+                placeholder={`Firmenname Eingeben`}
+                className="outline-none border-none p-3 rounded-md"
+              />
+              <input
+                required={true}
+                type="text"
+                id="clientName"
+                placeholder={`Kundenname`}
+                className="outline-none border-none p-3 rounded-md"
+              />
+            </>
+          )}
           <button className="bg-white/90 p-3 rounded-md">Erstellen</button>
         </form>
       </>

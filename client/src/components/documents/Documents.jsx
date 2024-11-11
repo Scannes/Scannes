@@ -1,7 +1,6 @@
 import Document from "./Document";
 
 export default function Documents({ filteredFiles = [] }) {
-  console.log(filteredFiles, "gg");
   return (
     <div className="bg-white rounded-md py-3 px-5 border border-[#ddd] overflow-scroll lg:overflow-hidden">
       <div className="flex flex-col gap-2 min-w-[1200px]">
@@ -16,6 +15,7 @@ export default function Documents({ filteredFiles = [] }) {
             category={file.category}
             src={file.img}
             company={file.company}
+            isUploaded={file.isUploaded}
           />
         ))}
       </div>

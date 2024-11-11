@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export default function Companies() {
   const role = useSelector((state) => state.user?.user?.role);
   const companies = useSelector((state) => state.user.users);
+  const staffCompanies = useSelector((state) => state.user.user?.companies);
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -22,9 +23,13 @@ export default function Companies() {
           <p>Name</p>
           {role === "admin" && <p>Löschen</p>}
         </div>
-        {companies.map((company) => (
-          <Company role={role} name={company} key={company} />
-        ))}
+        {role === "admin"
+          ? companies.map((company) => (
+              <Company role={role} name={company} key={company} />
+            ))
+          : staffCompanies.map((company) => (
+              <Company role={role} name={company} key={company} />
+            ))}
       </div>
     </div>
   );

@@ -48,8 +48,8 @@ export default async function exportAsPDF(
   const pdfDoc = await PDFDocument.create();
 
   // Get current date formatted as desired
-  const date = new Date().toLocaleDateString();
-  const formattedDate = `${category}  ${date}`;
+  const date = new Date().toLocaleDateString("de-DE"); // German format: dd.mm.yyyy
+  const stampText = `${category.toUpperCase()}, ${date}`;
 
   // Load the font
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -93,19 +93,34 @@ export default async function exportAsPDF(
       height: scaledHeight,
     });
 
-    // Draw the background for the date overlay
-    const textSize = 12; // Font size for the date text
-    const textWidth = font.widthOfTextAtSize(formattedDate, textSize);
-    const textX = A4_WIDTH - textWidth - 10; // 10 points from the right edge
-    const textY = A4_HEIGHT - textSize - 5; // Move down by 10px for text
+    // Draw the stamp-style text
+    const textSize = 20; // Adjust to match the desired size
+    const textWidth = font.widthOfTextAtSize(stampText, textSize);
+    const textHeight = font.heightAtSize(textSize);
+    const padding = 10; // Padding for the stamp box
 
-    // Draw the date text on top of the rectangle
-    page.drawText(formattedDate, {
-      x: textX,
-      y: textY,
+    // Calculate position to center the stamp on the page
+    const centerX = (A4_WIDTH - textWidth) / 2;
+    const centerY = A4_HEIGHT - textHeight - 20;
+
+    // Draw the red rectangle (border)
+    page.drawRectangle({
+      x: centerX - padding,
+      y: centerY - padding,
+      width: textWidth + 2 * padding,
+      height: textHeight + 2 * padding,
+      borderColor: rgb(1, 0, 0), // Red color
+      borderWidth: 2,
+      // color: rgb(1, 1, 1), // White background inside the box
+    });
+
+    // Draw the stamp text inside the box
+    page.drawText(stampText, {
+      x: centerX,
+      y: centerY,
       size: textSize,
       font: font,
-      color: rgb(0, 0, 0), // Black color
+      color: rgb(1, 0, 0), // Red color for the text
     });
   }
 

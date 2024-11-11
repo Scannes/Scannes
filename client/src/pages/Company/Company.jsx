@@ -76,6 +76,11 @@ export default function Company() {
         )}
 
         <DocumentFolders company={company} />
+        {role === "admin" && (
+          <form>
+            <input type="text" />
+          </form>
+        )}
       </div>
     </div>
   );

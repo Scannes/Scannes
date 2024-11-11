@@ -45,7 +45,7 @@ router.get(
 router.post(
   "/delete",
   authController.protect,
-  authController.checkRole("admin"),
+  authController.checkRole("admin staff"),
   pdfController.deletePdf
 );
 router.post(

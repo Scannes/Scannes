@@ -34,24 +34,43 @@ export async function login(email, password) {
     );
   }
 }
-export async function signup(password, name, role, email) {
+export async function signup(password, name, role, email, company, clientName) {
   try {
     const jwt = Cookies.get("jwt");
-    const res = await axios.post(
-      `${API_URL}/users/signup`,
-      {
-        email,
-        password,
-        confirmPassword: password,
-        name,
-        role,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
+    if (email) {
+      await axios.post(
+        `${API_URL}/users/signup`,
+        {
+          email,
+          password,
+          confirmPassword: password,
+          name,
+          role,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+    } else {
+      await axios.post(
+        `${API_URL}/users/signup`,
+        {
+          password,
+          confirmPassword: password,
+          name,
+          role,
+          company,
+          clientName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+    }
     window.location.reload();
   } catch (err) {
     dispatch(
@@ -422,6 +441,35 @@ export async function uploadToOneDrive(fileName, organization, folderName) {
         message: "File Uploaded Successfully",
       })
     );
+  } catch (err) {
+    dispatch(
+      setError({
+        isError: true,
+        isActive: true,
+        message:
+          err.response.data.message ||
+          "Something went wrong while fetching data.",
+      })
+    );
+  }
+}
+
+export async function addToCompany(company, userName) {
+  try {
+    const jwt = Cookies.get("jwt");
+    const res = await axios.post(
+      `${API_URL}/users/add-to-company`,
+      {
+        company: company.trim().toLowerCase(),
+        userName: userName.trim().toLowerCase(),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    window.location.reload();
   } catch (err) {
     dispatch(
       setError({

@@ -17,6 +17,10 @@ const fileSchema = new mongoose.Schema({
   date: Date,
   pages: Number,
   company: String,
+  isUploaded: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("File", fileSchema);

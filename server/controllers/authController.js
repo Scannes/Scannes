@@ -27,8 +27,10 @@ function getIDFromToken(token) {
 ////////////////////////// Create User////////////////////////////////
 ////////////////////////// Create User////////////////////////////////
 exports.createUser = catchAsync(async (req, res, next) => {
-  const { email, password, confirmPassword, name, role } = req.body;
+  const { email, password, confirmPassword, name, role, company, clientName } =
+    req.body;
   const roles = ["user", "staff"];
+
   if (!password || !confirmPassword)
     return next(new AppError("Please provide email and password", 400));
 
@@ -63,7 +65,9 @@ exports.createUser = catchAsync(async (req, res, next) => {
     const newUser = await User.create({
       password,
       name: name.toLowerCase(),
-
+      company: company.toLowerCase(),
+      email: name.toLowerCase(),
+      clientName: clientName,
       role: role.toLowerCase(),
     });
 
@@ -228,5 +232,30 @@ exports.deleteUser = catchAsync(async function (req, res, next) {
 
   res.status(200).json({
     message: "User and associated files deleted successfully",
+  });
+});
+
+exports.addCompany = catchAsync(async function (req, res, next) {
+  const { company, userName } = req.body;
+  if (!company.trim())
+    return next(new AppError("Company name is required", 400));
+
+  const doesCompanyExists = await User.find({
+    company: company.toLowerCase().trim(),
+  });
+  if (!doesCompanyExists)
+    return next(new AppError("Company does not exist", 400));
+
+  const user = await User.findOne({ name: userName });
+  if (!user) return next(new AppError("User does not exist", 400));
+
+  if (user.companies.includes(company))
+    return next(new AppError("User already has access to company", 400));
+  user.companies.push(company);
+
+  await user.save();
+  res.status(200).json({
+    message: "success",
+    data: user,
   });
 });
